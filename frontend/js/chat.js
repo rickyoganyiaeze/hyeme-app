@@ -151,7 +151,8 @@ export const initChatList = async () => {
         });
     }
 
-    const findPeopleBtn = document.getElementById('find-people-btn-bottom');
+    // FIX: Changed ID from 'find-people-btn-bottom' to 'open-find-people-btn' to match the HTML file
+    const findPeopleBtn = document.getElementById('open-find-people-btn');
     if (findPeopleBtn) {
         const newFindBtn = findPeopleBtn.cloneNode(true);
         findPeopleBtn.parentNode.replaceChild(newFindBtn, findPeopleBtn);

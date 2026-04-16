@@ -41,9 +41,15 @@ try {
 // ============================================================
 console.log('⚙️  Setting up middleware...');
 
-// CORS - FIXED: Explicitly allow Live Server (127.0.0.1:5500) and Localhost
+// CORS - FIX: Added your hosted URL to the allowed list
 app.use(cors({
-    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://127.0.0.1:5500', 'http://localhost:5500'],
+    origin: [
+        'http://localhost:5000', 
+        'http://127.0.0.1:5000', 
+        'http://127.0.0.1:5500', 
+        'http://localhost:5500',
+        'https://hyeme-app.onrender.com' // <--- ADDED THIS FOR HOSTING
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

@@ -23,12 +23,12 @@ export const initSocket = (token, userId) => {
     
     console.log("Connecting to Socket.IO server...");
     
-    socket = io("http://localhost:5000", {
+    // FIX: Changed from "http://localhost:5000" to "/" so it works on Render/Production
+    socket = io("/", {
         auth: { token },
-        // FIX: Allow polling fallback so the browser doesn't "sleep" the connection
         transports: ['websocket', 'polling'], 
         reconnection: true,
-        reconnectionAttempts: Infinity, // Keep trying to reconnect
+        reconnectionAttempts: Infinity,
         reconnectionDelay: 1000,
         timeout: 20000
     });
@@ -52,7 +52,6 @@ export const initSocket = (token, userId) => {
     socket.on("disconnect", (reason) => {
         console.log("⚠️ Socket disconnected:", reason);
         socket._connected = false;
-        // If the server disconnected us, try to reconnect manually
         if (reason === "io server disconnect") socket.connect();
     });
 

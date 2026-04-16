@@ -8,8 +8,15 @@ let onlineUsers = new Map();
 
 const initSocket = (httpServer) => {
     io = new Server(httpServer, {
+        // FIX: Added your hosted URL to Socket CORS
         cors: { 
-            origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://127.0.0.1:5500', 'http://localhost:5500'],
+            origin: [
+                'http://localhost:5000', 
+                'http://127.0.0.1:5000', 
+                'http://127.0.0.1:5500', 
+                'http://localhost:5500',
+                'https://hyeme-app.onrender.com' // <--- ADDED THIS FOR HOSTING
+            ],
             methods: ["GET", "POST"],
             credentials: true 
         },
