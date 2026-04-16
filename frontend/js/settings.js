@@ -34,12 +34,16 @@ export const initSettings = () => {
         item.addEventListener('click', () => router.navigate(`settings/${item.dataset.page}`));
     });
 
-    const logoutBtn = document.getElementById('logout-btn');
+     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to log out?')) {
+                // 1. Clear all data
                 localStorage.clear();
-                location.reload();
+                
+                // 2. Force navigation to Login immediately
+                // We use window.location to do a full reload to the start
+                window.location.href = '/'; 
             }
         });
     }
