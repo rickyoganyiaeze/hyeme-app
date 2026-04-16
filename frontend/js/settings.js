@@ -1,5 +1,5 @@
 import router from './router.js';
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://hyeme-app.onrender.com/api';
 
 export const initSettings = () => {
     const token = localStorage.getItem('hyeme_token');

@@ -1,5 +1,5 @@
 import router from './router.js';
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://hyeme-app.onrender.com/api';
 
 const countries = [
     { flag: '🇺🇸', name: 'United States', code: '1' },

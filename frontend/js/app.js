@@ -7,7 +7,7 @@ import { initExplore } from './explore.js';
 import { initSettings, initThemeSettings } from './settings.js';
 import { initNavbar } from '../components/navbar.js';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://hyeme-app.onrender.com/api';
 
 let cachedRequests = [];
 let unreadCount = 0;

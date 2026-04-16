@@ -1,7 +1,7 @@
 import router from './router.js';
 import { getSocket } from './socket.js';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://hyeme-app.onrender.com/api';
 let myUserId = null;
 
 // ================= CHAT LIST (The Queue) =================
