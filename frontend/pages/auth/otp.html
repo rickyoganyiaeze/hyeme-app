@@ -37,3 +37,32 @@
 
     </div>
 </div>
+
+<!-- FIX: Added script to handle pasting the full code at once -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const otpInputs = document.querySelectorAll('.otp-input');
+        
+        otpInputs.forEach((input, index) => {
+            // Listen for a paste event on ANY of the 6 boxes
+            input.addEventListener('paste', (e) => {
+                e.preventDefault(); // Stop default paste behavior
+                
+                // Get the pasted text from clipboard
+                let pastedData = (e.clipboardData || window.clipboardData).getData('text');
+                
+                // Remove any spaces or dashes the user might have copied
+                pastedData = pastedData.replace(/\D/g, ''); 
+
+                if (pastedData.length >= 6) {
+                    // Split the 6 numbers and put them in the boxes
+                    for (let i = 0; i < 6; i++) {
+                        otpInputs[i].value = pastedData[i];
+                    }
+                    // Move focus to the last box
+                    otpInputs[5].focus();
+                }
+            });
+        });
+    });
+</script>
