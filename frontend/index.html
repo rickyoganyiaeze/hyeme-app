@@ -59,30 +59,11 @@
     <script type="module">
         import { initApp } from './js/app.js';
 
-        // Get token safely
-        const token = localStorage.getItem('hyeme_token');
-
-        if (!token) {
-            // 1. No token? Hide splash, show app container
+        setTimeout(() => {
             document.getElementById('splash').style.display = 'none';
             document.getElementById('app').classList.remove('hidden');
-            
-            // 2. FIX: Use a tiny delay to ensure the DOM and Router are fully ready before routing
-            setTimeout(() => {
-                window.dispatchEvent(new CustomEvent('routeChanged', { detail: 'auth/phone' }));
-            }, 50);
-        } else {
-            // 2. Has token? Show Splash screen while we verify
-            document.getElementById('splash').style.display = 'flex';
-            document.getElementById('app').classList.add('hidden');
-
-            // Wait 2 seconds then init
-            setTimeout(() => {
-                document.getElementById('splash').style.display = 'none';
-                document.getElementById('app').classList.remove('hidden');
-                initApp();
-            }, 2000);
-        }
+            initApp();
+        }, 2000);
     </script>
 </body>
 
