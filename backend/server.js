@@ -104,9 +104,6 @@ app.get('/api/health', (req, res) => {
 // FALLBACK ROUTE FOR SPA/CLIENT-SIDE ROUTING
 // ============================================================
 app.get('*', (req, res) => {
-    // Log the requested path for debugging
-    console.log(`📍 Serving page for: ${req.originalUrl}`);
-    
     // Exclude API routes from this fallback
     if (req.originalUrl.startsWith('/api')) {
         return res.status(404).json({ 
@@ -115,7 +112,8 @@ app.get('*', (req, res) => {
         });
     }
     
-    // Serve index.html for all non-API requests
+    // FIX: Serve index.html for ALL other requests
+    // This allows the frontend router to work on refresh
     const indexPath = path.join(__dirname, '../frontend/index.html');
     res.sendFile(indexPath, (err) => {
         if (err) {
