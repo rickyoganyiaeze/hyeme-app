@@ -14,20 +14,17 @@ exports.sendOTP = async (req, res, next) => {
         const result = await sendOTP(phone);
         otpStore[phone] = result.mockOtp; 
 
+        // PRODUCTION MODE LOG: Only visible in Render logs, not to the user
         console.log(`\n=========================================`);
-        console.log(`[NEW OTP REQUEST] Phone: ${phone}`);
-        console.log(`[YOUR MOCK OTP CODE IS: ${result.mockOtp}]`);
+        console.log(`[SMS SIMULATION] Phone: ${phone}`);
+        console.log(`[HIDDEN OTP CODE: ${result.mockOtp}]`);
         console.log(`=========================================\n`);
 
-        // DEV MODE: Send code back to app if it exists
-        if (result.devOtp) {
-            return res.status(200).json({ 
-                message: 'OTP generated (Dev Mode)', 
-                devOtp: result.devOtp 
-            });
-        }
-
-        res.status(200).json({ message: 'OTP sent successfully' });
+        // FIX: Always return a clean message. No devOtp sent to the frontend.
+        res.status(200).json({ 
+            message: 'Code sent successfully' 
+        });
+        
     } catch (error) { next(error); }
 };
 
@@ -38,11 +35,11 @@ exports.verifyOTP = async (req, res, next) => {
 
         const storedOtp = otpStore[phone];
         
-        // FIX: Handling for Reconnection
+        // Handling for Reconnection
         if (!storedOtp) {
              const existingUser = await User.findOne({ phone });
              if (!existingUser) {
-                 return res.status(400).json({ message: 'Please request an OTP first' });
+                 return res.status(400).json({ message: 'Please request a code first' });
              }
              console.log(`[Recovery Mode] User ${phone} found, allowing login.`);
         } else {
