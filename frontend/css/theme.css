@@ -1,0 +1,9 @@
+/* Theme specific overrides */
+.theme-purple { --primary: #7C3AED; --primary-light: #A78BFA; --primary-dark: #5B21B6; }
+.theme-blue { --primary: #2563EB; --primary-light: #60A5FA; --primary-dark: #1D4ED8; }
+.theme-green { --primary: #16A34A; --primary-light: #4ADE80; --primary-dark: #15803D; }
+
+/* Custom Chat Backgrounds */
+[data-bg="default"] .messages-container { background: var(--bg-secondary); }
+[data-bg="dark"] .messages-container { background: #0f172a; }
+[data-bg="gradient"] .messages-container { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); }

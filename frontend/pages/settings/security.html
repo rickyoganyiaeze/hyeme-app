@@ -1,0 +1,42 @@
+<div class="screen active" style="display:flex !important; flex-direction:column; height:100%; background:var(--bg-main);">
+    
+    <div class="app-header" style="background:var(--bg-main);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-arrow-left" id="back-settings-sec" style="cursor:pointer;font-size:18px;color:var(--primary);"></i>
+            <h2 style="font-size:18px;">Security</h2>
+        </div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;">
+        <div class="settings-item">
+            <div class="settings-icon"><i class="fas fa-fingerprint"></i></div>
+            <div class="settings-text">
+                <h4>Fingerprint Lock</h4>
+                <p>Use your device fingerprint to open HyeMe</p>
+            </div>
+            <input type="checkbox" style="width:20px;height:20px;accent-color:var(--primary);cursor:pointer;">
+        </div>
+
+        <div class="settings-item">
+            <div class="settings-icon"><i class="fas fa-face-smile"></i></div>
+            <div class="settings-text">
+                <h4>Face ID Lock</h4>
+                <p>Use facial recognition to open HyeMe</p>
+            </div>
+            <input type="checkbox" style="width:20px;height:20px;accent-color:var(--primary);cursor:pointer;">
+        </div>
+
+        <div class="settings-item">
+            <div class="settings-icon"><i class="fas fa-clock"></i></div>
+            <div class="settings-text">
+                <h4>Auto-Lock Timer</h4>
+                <p>Lock HyeMe after inactivity</p>
+            </div>
+            <select style="border:none;background:var(--bg-secondary);color:var(--primary);padding:8px;border-radius:6px;font-size:14px;outline:none;">
+                <option>Immediate</option>
+                <option>1 minute</option>
+                <option>5 minutes</option>
+            </select>
+        </div>
+    </div>
+</div>

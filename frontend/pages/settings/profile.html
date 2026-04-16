@@ -1,0 +1,46 @@
+<div class="screen active" style="display:flex !important; flex-direction:column; height:100%; background:var(--bg-main);">
+    
+    <div class="app-header" style="background:var(--bg-main);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-arrow-left" id="back-settings-profile" style="cursor:pointer;font-size:18px;color:var(--primary);"></i>
+            <h2 style="font-size:18px;">Profile</h2>
+        </div>
+    </div>
+
+    <!-- Using DIV instead of FORM -->
+    <div style="flex:1;overflow-y:auto;padding:32px;display:flex;flex-direction:column;align-items:center;">
+        
+        <!-- AVATAR AREA -->
+        <div style="position:relative;margin-bottom:8px;cursor:pointer;" onclick="document.getElementById('edit-avatar-upload').click()">
+            <div style="width: 120px; height: 120px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid var(--primary); position:relative;">
+                <i class="fas fa-user" id="edit-avatar-icon" style="font-size: 48px; color: var(--primary);"></i>
+                <img id="edit-avatar-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                
+                <!-- Camera Icon -->
+                <div style="position:absolute;bottom:0;right:0;background:var(--primary);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid var(--bg-main);">
+                    <i class="fas fa-camera" style="color:white;font-size:12px;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPLOAD TEXT BUTTON -->
+        <div onclick="document.getElementById('edit-avatar-upload').click()" style="color:var(--primary);font-size:14px;font-weight:600;margin-bottom:32px;cursor:pointer;text-decoration:none;">
+            Change Profile Photo
+        </div>
+
+        <!-- Hidden File Input -->
+        <input type="file" id="edit-avatar-upload" accept="image/*" style="display: none;">
+
+        <!-- INPUTS -->
+        <div style="width:100%;">
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">Name</p>
+            <input type="text" id="edit-user-name" placeholder="Your Name" style="width:100%;padding:14px;border:none;font-size:16px;background:var(--bg-secondary);color:var(--text-main);border-radius:8px;outline:none;margin-bottom:24px;">
+            
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">About</p>
+            <textarea id="edit-user-about" rows="3" placeholder="Write something about yourself..." style="resize:none;width:100%;padding:14px;border:none;font-size:16px;background:var(--bg-secondary);color:var(--text-main);border-radius:8px;outline:none;margin-bottom:32px;"></textarea>
+
+            <!-- SAVE BUTTON -->
+            <button class="btn-primary btn-interactive" id="save-profile-btn" type="button" style="box-shadow:none;height:50px;font-size:16px;width:100%;">Save Changes</button>
+        </div>
+    </div>
+</div>

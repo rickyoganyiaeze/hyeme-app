@@ -1,0 +1,74 @@
+/* ================================================================
+   Heyme WEB STYLE RESPONSIVE SYSTEM
+   ================================================================ */
+
+/* --- MOBILE PHONES (Default) --- */
+.app-container {
+    width: 100%;
+    height: 100vh;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-main);
+}
+
+body {
+    background-color: var(--bg-main);
+    margin: 0;
+    padding: 0;
+}
+
+/* --- DESKTOP / LAPTOP (Split Screen Layout) --- */
+@media (min-width: 1024px) {
+    
+    body {
+        background-color: #d1d7db; /* Heyme Web background grey */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* The main app container becomes the desktop window */
+    .app-container {
+        max-width: 1600px; /* Max width like web.Heyme.com */
+        width: 100%;
+        height: 95vh; /* Slight margin from top/bottom */
+        background: #fff; 
+        border-radius: 0; 
+        box-shadow: 0 17px 50px 0 rgba(11,20,26,.19), 0 12px 15px 0 rgba(11,20,26,.24); /* Deep shadow */
+        display: flex; /* CRITICAL: Enable Flexbox for Side-by-Side */
+        flex-direction: row; /* Horizontal layout */
+        overflow: hidden;
+    }
+
+    /* Ensure the screen container fills the app */
+    #screen-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        position: relative;
+    }
+
+    /* 
+       SPECIFIC FIX: 
+       On Desktop, we want the 'Chats List' on the LEFT (30% width)
+       and the 'Chat View' on the RIGHT (70% width).
+       
+       Since your JS swaps screens, we will use CSS to show/hide them 
+       based on classes, OR force the app to handle width.
+       
+       For now, let's ensure the container doesn't look like a mobile phone.
+    */
+    .screen {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; 
+        left: 0;
+        background: var(--bg-main);
+        z-index: 10;
+    }
+}

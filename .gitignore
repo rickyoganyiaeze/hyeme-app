@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Environment Variables (KEEP YOUR SECRETS SAFE)
+.env
+
+# Uploaded Files (Optional: Don't push user uploads to GitHub)
+# storage/

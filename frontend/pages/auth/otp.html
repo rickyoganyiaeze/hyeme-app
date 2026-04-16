@@ -1,0 +1,39 @@
+<div class="screen active" style="display:flex !important; background: var(--bg-main);">
+    <div class="auth-container" style="justify-content: center; text-align: center; padding: 32px;">
+        
+        <div style="text-align: left; margin-bottom: 32px;">
+            <i class="fas fa-arrow-left" id="back-to-phone" style="font-size: 20px; color: var(--primary); cursor: pointer;"></i>
+        </div>
+
+        <h1 style="font-size: 24px; margin-bottom: 16px; color: var(--text-main);">Enter the 6-digit code</h1>
+        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5;">
+            Sent to <span style="font-weight: 600; color: var(--text-main);" id="otp-phone-display"></span>
+        </p>
+
+        <div id="otp-error" style="background:rgba(239, 68, 68, 0.1);border:1px solid rgba(239, 68, 68, 0.2);border-radius:8px;padding:12px;margin-bottom:16px;display:none;align-items:center;gap:8px;">
+            <i class="fas fa-times-circle" style="color:var(--danger);font-size:16px;"></i>
+            <p id="otp-error-text" style="color:var(--danger);font-size:13px;"></p>
+        </div>
+
+        <div style="display:flex; gap: 8px; justify-content:center; margin-bottom: 32px;">
+            <input type="text" maxlength="1" class="otp-input" style="width: 44px; height: 52px; text-align: center; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; background: var(--bg-secondary); color: var(--text-main); outline: none;">
+            <input type="text" maxlength="1" class="otp-input" style="width: 44px; height: 52px; text-align: center; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; background: var(--bg-secondary); color: var(--text-main); outline: none;">
+            <input type="text" maxlength="1" class="otp-input" style="width: 44px; height: 52px; text-align: center; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; background: var(--bg-secondary); color: var(--text-main); outline: none;">
+            <input type="text" maxlength="1" class="otp-input" style="width: 44px; height: 52px; text-align: center; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; background: var(--bg-secondary); color: var(--text-main); outline: none;">
+            <input type="text" maxlength="1" class="otp-input" style="width: 44px; height: 52px; text-align: center; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; background: var(--bg-secondary); color: var(--text-main); outline: none;">
+            <input type="text" maxlength="1" class="otp-input" style="width: 44px; height: 52px; text-align: center; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; background: var(--bg-secondary); color: var(--text-main); outline: none;">
+        </div>
+
+        <button class="btn-primary" id="verify-otp-btn" style="box-shadow: none; height: 50px; font-size: 16px;">
+            Next
+        </button>
+
+        <p id="resend-otp-section" style="margin-top: 24px; font-size: 14px; color: var(--text-secondary);">
+            Didn't receive code? <span id="resend-timer" style="color: var(--text-secondary);">Resend in 30s</span>
+        </p>
+        <p id="resend-otp-btn" style="margin-top: 24px; font-size: 14px; color: var(--primary); font-weight: 600; cursor: pointer; display: none;">
+            Resend Code
+        </p>
+
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="screen active" style="display:flex !important; flex-direction:column; height:100%; background:var(--bg-main);">
+    
+    <div class="app-header" style="background:var(--bg-main);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-arrow-left" id="back-settings-priv" style="cursor:pointer;font-size:18px;color:var(--primary);"></i>
+            <h2 style="font-size:18px;">Privacy</h2>
+        </div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;">
+        <div class="settings-item">
+            <div class="settings-text">
+                <h4>Status Visibility</h4>
+                <p>Who can see your status updates</p>
+            </div>
+            <select style="border:none;background:var(--bg-secondary);color:var(--primary);padding:8px;border-radius:6px;font-size:14px;outline:none;">
+                <option>Everyone</option>
+                <option>Contacts</option>
+                <option>Friends</option>
+            </select>
+        </div>
+
+        <div class="settings-item">
+            <div class="settings-text">
+                <h4>Anonymous Mode</h4>
+                <p>Browse and post without showing your name</p>
+            </div>
+            <label style="position:relative;display:inline-block;width:44px;height:24px;">
+                <input type="checkbox" style="opacity:0;width:0;height:0;">
+                <span style="position:absolute;cursor:pointer;inset:0;background-color:var(--border-color);border-radius:24px;transition:0.3s;"></span>
+            </label>
+        </div>
+
+        <div class="settings-item">
+            <div class="settings-text">
+                <h4>Who can add me</h4>
+                <p>Control who can send you connection requests</p>
+            </div>
+            <select style="border:none;background:var(--bg-secondary);color:var(--primary);padding:8px;border-radius:6px;font-size:14px;outline:none;">
+                <option>Everyone</option>
+                <option>Nobody</option>
+            </select>
+        </div>
+    </div>
+</div>

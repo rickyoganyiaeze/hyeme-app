@@ -1,0 +1,36 @@
+<div class="app-header">
+    <div style="display:flex;align-items:center;gap:12px;">
+        <i class="fas fa-bars" id="menu-toggle-btn" style="cursor:pointer;font-size:18px;color:var(--text-main);"></i>
+        <h2 id="page-title" style="font-size:18px;">Chats</h2>
+    </div>
+     <div style="display:flex;align-items:center;gap:16px;position:relative;">
+        
+        <!-- NEW: BELL ICON FOR NOTIFICATIONS -->
+        <div style="position:relative;cursor:pointer;" id="notification-bell-btn">
+            <i class="fas fa-bell" style="font-size:18px;color:var(--text-main);"></i>
+            <div id="bell-badge" style="display:none;position:absolute;top:-5px;right:-5px;background:var(--danger);color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:50%;justify-content:center;align-items:center;padding:0 4px;">0</div>
+        </div>
+
+        <i class="fas fa-search" id="global-search-btn" style="cursor:pointer;font-size:16px;color:var(--text-main);"></i>
+        <i class="fas fa-ellipsis-vertical" style="cursor:pointer;font-size:16px;color:var(--text-main);"></i>
+    </div>
+</div>
+
+<div class="bottom-nav" id="main-nav">
+    <div class="nav-item active" data-target="chats">
+        <i class="fas fa-comment-dots"></i>
+        <span>Chats</span>
+    </div>
+    <div class="nav-item" data-target="calls">
+        <i class="fas fa-phone"></i>
+        <span>Calls</span>
+    </div>
+    <div class="nav-item" data-target="groups">
+        <i class="fas fa-users"></i>
+        <span>Groups</span>
+    </div>
+    <div class="nav-item" data-target="explore">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="screen active" style="display:flex !important; flex-direction:column; height:100%; background:var(--bg-main);">
+    
+    <div class="app-header" style="background:var(--bg-main);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-arrow-left" id="back-to-chats-from-settings" style="cursor:pointer;font-size:18px;color:var(--primary);"></i>
+            <h2 style="font-size:18px;">Settings</h2>
+        </div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;">
+        <!-- Profile Section -->
+        <div class="settings-item" data-page="profile">
+            <div class="chat-avatar" id="settings-user-avatar" style="width:50px;height:50px;">R</div>
+            <div class="settings-text">
+                <h4 id="settings-user-name">Richard</h4>
+                <p id="settings-user-about">Hey there! I am using HyeMe</p>
+            </div>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="settings-item" data-page="theme">
+            <div class="settings-icon"><i class="fas fa-palette"></i></div>
+            <div class="settings-text"><h4>Theme</h4><p>Change colors and wallpaper</p></div>
+            <i class="fas fa-chevron-right" style="color:var(--text-secondary);font-size:12px;"></i>
+        </div>
+        
+        <div class="settings-item" data-page="security">
+            <div class="settings-icon"><i class="fas fa-lock"></i></div>
+            <div class="settings-text"><h4>App Lock</h4><p>Use device lock</p></div>
+            <i class="fas fa-chevron-right" style="color:var(--text-secondary);font-size:12px;"></i>
+        </div>
+
+        <div class="settings-item" data-page="privacy">
+            <div class="settings-icon"><i class="fas fa-shield-halved"></i></div>
+            <div class="settings-text"><h4>Privacy</h4><p>Status, anonymous mode</p></div>
+            <i class="fas fa-chevron-right" style="color:var(--text-secondary);font-size:12px;"></i>
+        </div>
+
+        <div class="settings-item" id="logout-btn" style="justify-content:center;margin-top:20px;border:none;">
+            <h4 style="color:var(--danger);font-size:16px;">Log out</h4>
+        </div>
+    </div>
+</div>

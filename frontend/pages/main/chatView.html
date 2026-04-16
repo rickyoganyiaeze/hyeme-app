@@ -1,0 +1,36 @@
+<div class="screen active" style="display:flex !important; flex-direction:column; height:100%; background:var(--bg-secondary);">
+    
+    <div class="app-header chat-view-header" style="background:var(--bg-main); z-index: 10;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <!-- FIXED: Ensure ID matches JS -->
+            <i class="fas fa-arrow-left" id="back-to-chats" style="cursor:pointer;font-size:18px;color:var(--primary);"></i>
+            
+            <div class="chat-avatar" style="width:40px;height:40px;" id="chat-user-avatar">R</div>
+            <div>
+                <div class="chat-name" style="font-size:15px;" id="chat-user-name">User</div>
+                <div style="font-size:11px;color:var(--text-secondary);" class="chat-last-msg">Tap to view profile</div>
+            </div>
+        </div>
+        <div style="display:flex;gap:16px;">
+            <i class="fas fa-phone" style="font-size:16px;color:var(--primary);cursor:pointer;"></i>
+            <i class="fas fa-video" style="font-size:16px;color:var(--primary);cursor:pointer;"></i>
+        </div>
+    </div>
+
+    <div class="messages-container" id="messages-container">
+        <!-- Messages injected here -->
+    </div>
+
+    <div class="app-footer" style="background:var(--bg-main); z-index: 10;">
+        <div class="msg-input-area">
+            <button><i class="fas fa-face-smile"></i></button>
+            <button><i class="fas fa-paperclip"></i></button>
+            
+            <!-- FIXED: Ensure ID matches JS -->
+            <input type="text" id="msg-input" placeholder="Message..." autocomplete="off">
+            
+            <!-- FIXED: Ensure ID matches JS -->
+            <button class="send-btn" id="send-msg-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
