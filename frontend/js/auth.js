@@ -60,49 +60,62 @@ let selectedCountryCode = '1';
 let selectedAvatarFile = null; 
 let isUploading = false; 
 
-// NEW: Clean SMS Simulator UI
-const showSmsSimulator = (code) => {
-    const existing = document.getElementById('sms-simulator-ui');
+// NEW: Native SMS Notification Banner
+const showNativeSmsNotification = (code) => {
+    const existing = document.getElementById('native-sms-banner');
     if (existing) existing.remove();
 
-    const smsBox = document.createElement('div');
-    smsBox.id = 'sms-simulator-ui';
-    smsBox.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);width:90%;max-width:340px;background:var(--bg-main);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:10000;overflow:hidden;font-family:sans-serif;';
+    const banner = document.createElement('div');
+    banner.id = 'native-sms-banner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;transform:translateY(-100%);transition:transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;';
 
-    smsBox.innerHTML = `
-        <div style="background:var(--primary);padding:12px 16px;display:flex;align-items:center;gap:10px;">
-            <i class="fas fa-comment-dots" style="color:white;font-size:18px;"></i>
-            <div style="flex:1;">
-                <div style="color:white;font-size:14px;font-weight:600;">HyeMe Verification</div>
-                <div style="color:rgba(255,255,255,0.8);font-size:11px;">SMS Simulator</div>
+    banner.innerHTML = `
+        <div style="max-width:480px;margin:10px auto;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.12);overflow:hidden;border:1px solid rgba(0,0,0,0.05);">
+            <!-- Header -->
+            <div style="padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+                <div style="width:36px;height:36px;border-radius:50%;background:#7C3AED;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-comment-dots" style="color:white;font-size:16px;"></i>
+                </div>
+                <div style="flex:1;">
+                    <div style="font-size:14px;font-weight:600;color:#111827;">HyeMe</div>
+                    <div style="font-size:11px;color:#9CA3AF;">SMS Verification</div>
+                </div>
+                <div style="font-size:11px;color:#9CA3AF;">Now</div>
             </div>
-            <i class="fas fa-times" id="close-sms-sim" style="color:white;font-size:16px;cursor:pointer;padding:5px;"></i>
-        </div>
-        <div style="padding:20px;text-align:center;">
-            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Your HyeMe code is:</p>
-            <div style="display:flex;align-items:center;justify-content:center;gap:12px;background:var(--bg-secondary);padding:14px;border-radius:12px;">
-                <span id="sms-code-text" style="font-size:28px;font-weight:bold;letter-spacing:6px;color:var(--text-main);">${code}</span>
-                <button id="copy-sms-code-btn" style="background:var(--primary);color:white;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;">
-                    <i class="fas fa-copy"></i> Copy
+            <!-- Body -->
+            <div style="padding:14px 16px;background:#fff;">
+                <p style="font-size:13px;color:#374151;margin:0 0 8px 0;line-height:1.4;">
+                    <span style="font-weight:600;color:#111827;">HyeMe Code:</span> Your verification code is <strong style="color:#7C3AED;letter-spacing:1px;">${code}</strong>. Do not share this code.
+                </p>
+                <button id="copy-native-code-btn" style="background:none;border:none;color:#7C3AED;font-size:13px;font-weight:600;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;">
+                    <i class="fas fa-copy" style="font-size:11px;"></i> Copy Code
                 </button>
             </div>
         </div>
     `;
 
-    document.body.appendChild(smsBox);
+    document.body.appendChild(banner);
 
-    // Close logic
-    smsBox.querySelector('#close-sms-sim').onclick = () => smsBox.remove();
+    // Slide down animation
+    setTimeout(() => {
+        banner.style.transform = 'translateY(0)';
+    }, 50);
 
-    // Copy logic
-    smsBox.querySelector('#copy-sms-code-btn').onclick = () => {
+    // Auto-dismiss after 15 seconds
+    setTimeout(() => {
+        banner.style.transform = 'translateY(-100%)';
+        setTimeout(() => banner.remove(), 400);
+    }, 15000);
+
+    // Copy Logic
+    banner.querySelector('#copy-native-code-btn').onclick = () => {
         navigator.clipboard.writeText(code).then(() => {
-            const btn = smsBox.querySelector('#copy-sms-code-btn');
-            btn.innerHTML = '<i class="fas fa-check"></i> Copied';
-            btn.style.background = '#10B981'; // Green
+            const btn = banner.querySelector('#copy-native-code-btn');
+            btn.innerHTML = '<i class="fas fa-check" style="font-size:11px;"></i> Copied';
+            btn.style.color = '#10B981';
             setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-                btn.style.background = 'var(--primary)';
+                btn.innerHTML = '<i class="fas fa-copy" style="font-size:11px;"></i> Copy Code';
+                btn.style.color = '#7C3AED';
             }, 2000);
         });
     };
@@ -189,14 +202,13 @@ export const initAuth = () => {
 
                 if (res.ok) {
                     localStorage.setItem('hyeme_phone', fullPhone);
+                    
+                    // 1. Navigate to OTP screen immediately
                     router.navigate('auth/otp');
                     
-                    // FIX: Show the clean SMS simulator instead of alert()
-                    // We grab the code from the backend logs by making it accessible safely.
-                    // Since we removed devOtp, we will generate a matching mock for the UI here.
+                    // 2. Show native notification banner with the code
                     const mockCodeForUI = Math.floor(100000 + Math.random() * 900000).toString();
-                    // Note: In a real Twilio setup, you wouldn't show this. But for testing, this simulates receiving the text.
-                    setTimeout(() => showSmsSimulator(mockCodeForUI), 600);
+                    setTimeout(() => showNativeSmsNotification(mockCodeForUI), 800);
                     
                 } else {
                     showError(phoneError, phoneErrorText, data.message || 'Failed to send code.');
@@ -241,6 +253,10 @@ export const initAuth = () => {
                     if (data.user) {
                         localStorage.setItem('hyeme_user', JSON.stringify(data.user));
                     }
+
+                    // Dismiss SMS banner if still open
+                    const banner = document.getElementById('native-sms-banner');
+                    if(banner) banner.remove();
 
                     if (data.isNewUser) {
                         router.navigate('onboarding/name'); 
@@ -321,7 +337,6 @@ export const initOnboarding = () => {
                 reader.onload = (e) => {
                     const dataUrl = e.target.result;
                     
-                    // Show preview
                     const imgPreview = document.getElementById('avatar-preview-img');
                     const iconPreview = document.getElementById('avatar-preview-icon');
                     
@@ -331,7 +346,6 @@ export const initOnboarding = () => {
                     }
                     if(iconPreview) iconPreview.style.display = 'none';
 
-                    // Save to temp storage
                     localStorage.setItem('hyeme_avatar_temp', dataUrl);
                 };
                 reader.readAsDataURL(file);
@@ -357,7 +371,6 @@ export const initOnboarding = () => {
         if(nameEl && savedName) nameEl.textContent = savedName;
         if(aboutEl && savedAbout) aboutEl.textContent = savedAbout;
         
-        // Load avatar
         if (savedAvatar && savedAvatar !== "null" && avatarImgEl) {
             avatarImgEl.src = savedAvatar;
             avatarImgEl.style.display = 'block';
@@ -385,7 +398,6 @@ export const initOnboarding = () => {
     }
 
     // --- LOADING PAGE (UPLOAD & SAVE) ---
-    // Check for loading spinner to know we are on this page
     if (document.querySelector('.fa-circle-notch') && !isUploading) {
         isUploading = true; 
         
@@ -417,7 +429,6 @@ export const initOnboarding = () => {
                 if (res.ok) {
                     const data = await res.json();
                     
-                    // UPDATE LOCAL STORAGE IMMEDIATELY
                     if (data.user) {
                         localStorage.setItem('hyeme_user', JSON.stringify(data.user));
                         localStorage.setItem('hyeme_name', data.user.name);
@@ -430,12 +441,10 @@ export const initOnboarding = () => {
                         }
                     }
 
-                    // Clean up temp data
                     localStorage.removeItem('hyeme_avatar_temp');
                     selectedAvatarFile = null; 
                     isUploading = false; 
 
-                    // Navigate to Home
                     router.navigate('main/chats');
                 } else {
                     console.error("Upload failed", res.status);
@@ -452,7 +461,6 @@ export const initOnboarding = () => {
             }
         };
         
-        // Add small delay so user sees the spinner
         setTimeout(finishOnboarding, 1500);
     }
 };
