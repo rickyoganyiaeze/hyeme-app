@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,43 +8,13 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <style>
-        #splash {
-            position: fixed;
-            inset: 0;
-            background: #7C3AED;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        #splash h1 {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-
-        #splash p {
-            font-size: 15px;
-            opacity: 0.9;
-            max-width: 280px;
-            line-height: 1.5;
-        }
-
-        #splash i {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        #splash { position: fixed; inset: 0; background: #7C3AED; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; color: white; text-align: center; padding: 20px; }
+        #splash h1 { font-size: 48px; margin-bottom: 12px; }
+        #splash p { font-size: 15px; opacity: 0.9; max-width: 280px; line-height: 1.5; }
+        #splash i { font-size: 64px; margin-bottom: 20px; }
+        .hidden { display: none !important; }
     </style>
 </head>
-
 <body>
     <div id="splash">
         <i class="fas fa-comment-dots"></i>
@@ -58,29 +27,11 @@
     <script type="module" src="js/router.js"></script>
     <script type="module">
         import { initApp } from './js/app.js';
-
-        // FIX: Check login status BEFORE showing the app or splash
-        const token = localStorage.getItem('hyeme_token');
-
-        if (!token) {
-            // 1. No token? Hide splash, show app immediately on Login page
+        setTimeout(() => {
             document.getElementById('splash').style.display = 'none';
             document.getElementById('app').classList.remove('hidden');
-            // Directly navigate to auth to prevent flash of Chat page
-            window.dispatchEvent(new CustomEvent('routeChanged', { detail: 'auth/phone' }));
-        } else {
-            // 2. Has token? Show Splash screen while we verify
-            document.getElementById('splash').style.display = 'flex';
-            document.getElementById('app').classList.add('hidden');
-
-            // Wait 2 seconds then init
-            setTimeout(() => {
-                document.getElementById('splash').style.display = 'none';
-                document.getElementById('app').classList.remove('hidden');
-                initApp();
-            }, 2000);
-        }
+            initApp();
+        }, 2000);
     </script>
 </body>
-
 </html>
