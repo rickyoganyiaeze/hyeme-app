@@ -57,17 +57,15 @@ const countries = [
 ];
 
 let selectedCountryCode = '1';
-let selectedAvatarFile = null;
-
-// GLOBAL FLAG TO PREVENT LOOP
-let isUploading = false;
+let selectedAvatarFile = null; 
+let isUploading = false; 
 
 export const initAuth = () => {
     const phoneInput = document.getElementById('phone-number');
     const phoneError = document.getElementById('phone-error');
     const phoneErrorText = document.getElementById('phone-error-text');
     const phoneBtn = document.getElementById('send-otp-btn');
-
+    
     const pickerBtn = document.getElementById('country-picker-btn');
     const dropdown = document.getElementById('country-dropdown');
     const searchInput = document.getElementById('country-search');
@@ -107,7 +105,7 @@ export const initAuth = () => {
         });
     }
     if (searchInput) searchInput.addEventListener('input', (e) => renderCountries(e.target.value));
-    document.addEventListener('click', () => { if (dropdown) dropdown.style.display = 'none'; });
+    document.addEventListener('click', () => { if(dropdown) dropdown.style.display = 'none'; });
 
     if (phoneInput) setTimeout(() => phoneInput.focus(), 300);
 
@@ -133,37 +131,33 @@ export const initAuth = () => {
                 const cleanCode = selectedCountryCode.replace(/[^0-9]/g, '');
                 const fullPhone = `+${cleanCode}${rawNumber}`;
 
-                const res = await fetch(`${API_BASE}/auth/send-otp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone: fullPhone })
+                const res = await fetch(`${API_BASE}/auth/send-otp`, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ phone: fullPhone }) 
                 });
-
+                
                 const data = await res.json();
 
                 if (res.ok) {
                     localStorage.setItem('hyeme_phone', fullPhone);
-
+                    
                     // DEV MODE AUTO-FILL
                     if (data.devOtp) {
-                        // 1. Navigate to OTP page
                         router.navigate('auth/otp');
-
-                        // 2. Wait for page to load, then fill inputs
+                        
                         setTimeout(() => {
                             const otpInputs = document.querySelectorAll('.otp-input');
                             const code = data.devOtp.toString();
-
+                            
                             otpInputs.forEach((input, index) => {
                                 if (code[index]) {
                                     input.value = code[index];
-                                    // Trigger input event to enable verify button
                                     input.dispatchEvent(new Event('input'));
                                 }
                             });
-
-                            // 3. Show a toast so user knows what happened
-                            showToast(`Dev Mode: Code ${code} auto-filled`);
+                            
+                            alert(`Dev Mode: Code ${code} auto-filled`);
                         }, 500);
                     } else {
                         router.navigate('auth/otp');
@@ -205,28 +199,28 @@ export const initAuth = () => {
                 const savedPhone = localStorage.getItem('hyeme_phone') || '+1234567890';
                 const res = await fetch(`${API_BASE}/auth/verify-otp`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: savedPhone, otp: otp }) });
                 const data = await res.json();
-                if (res.ok) {
-                    localStorage.setItem('hyeme_token', data.token);
-
+                if (res.ok) { 
+                    localStorage.setItem('hyeme_token', data.token); 
+                    
                     if (data.user) {
                         localStorage.setItem('hyeme_user', JSON.stringify(data.user));
                     }
 
                     if (data.isNewUser) {
-                        router.navigate('onboarding/name');
+                        router.navigate('onboarding/name'); 
                     } else {
-                        router.navigate('main/chats');
+                        router.navigate('main/chats'); 
                     }
                 } else {
                     showError(otpError, otpErrorText, 'Invalid code.');
-                    otpInputs.forEach(i => i.value = '');
-                    otpInputs[0].focus();
+                    otpInputs.forEach(i => i.value = ''); 
+                    otpInputs[0].focus(); 
                 }
-            } catch (error) {
-                showError(otpError, otpErrorText, 'Network error.');
-            } finally {
-                verifyBtn.disabled = false;
-                verifyBtn.innerHTML = 'Next';
+            } catch (error) { 
+                showError(otpError, otpErrorText, 'Network error.'); 
+            } finally { 
+                verifyBtn.disabled = false; 
+                verifyBtn.innerHTML = 'Next'; 
             }
         });
     }
@@ -237,52 +231,52 @@ export const initAuth = () => {
     backBtns.forEach(btn => btn.addEventListener('click', () => router.navigate('auth/phone')));
 };
 
-const showError = (container, textEl, msg) => {
-    if (container) {
-        if (textEl) textEl.textContent = msg;
-        container.style.display = 'flex';
-    }
+const showError = (container, textEl, msg) => { 
+    if(container) { 
+        if(textEl) textEl.textContent = msg;
+        container.style.display = 'flex'; 
+    } 
 };
-const hideError = (container, textEl) => { if (container) container.style.display = 'none'; };
+const hideError = (container, textEl) => { if(container) container.style.display = 'none'; };
 
 export const initOnboarding = () => {
     // --- NAME PAGE ---
     const nameNext = document.getElementById('name-next-btn');
-    const nameBack = document.getElementById('back-name-btn');
-
-    if (nameNext) nameNext.addEventListener('click', () => {
+    const nameBack = document.getElementById('back-name-btn'); 
+    
+    if(nameNext) nameNext.addEventListener('click', () => { 
         const nameVal = document.getElementById('user-name').value.trim();
-        if (nameVal.length < 2) return alert('Please enter your name');
-        localStorage.setItem('hyeme_name', nameVal);
-        router.navigate('onboarding/about');
+        if(nameVal.length < 2) return alert('Please enter your name'); 
+        localStorage.setItem('hyeme_name', nameVal); 
+        router.navigate('onboarding/about'); 
     });
-
-    if (nameBack) nameBack.addEventListener('click', () => router.navigate('auth/phone'));
+    
+    if(nameBack) nameBack.addEventListener('click', () => router.navigate('auth/phone'));
 
     // --- ABOUT PAGE ---
     const aboutNext = document.getElementById('about-next-btn');
     const aboutBack = document.getElementById('back-about-btn');
 
-    if (aboutNext) aboutNext.addEventListener('click', () => {
-        localStorage.setItem('hyeme_about', document.getElementById('user-about').value);
-        router.navigate('onboarding/profile');
+    if(aboutNext) aboutNext.addEventListener('click', () => { 
+        localStorage.setItem('hyeme_about', document.getElementById('user-about').value); 
+        router.navigate('onboarding/profile'); 
     });
 
-    if (aboutBack) aboutBack.addEventListener('click', () => router.navigate('onboarding/name'));
+    if(aboutBack) aboutBack.addEventListener('click', () => router.navigate('onboarding/name'));
 
     // --- PROFILE PICTURE PAGE ---
     const profileDone = document.getElementById('profile-done-btn');
-    const profileBack = document.getElementById('back-profile-btn');
+    const profileBack = document.getElementById('back-profile-btn'); 
 
-    if (profileDone) profileDone.addEventListener('click', () => {
-        router.navigate('onboarding/confirm');
+    if(profileDone) profileDone.addEventListener('click', () => { 
+        router.navigate('onboarding/confirm'); 
     });
 
-    if (profileBack) profileBack.addEventListener('click', () => router.navigate('onboarding/about'));
+    if(profileBack) profileBack.addEventListener('click', () => router.navigate('onboarding/about'));
 
     // REAL IMAGE UPLOAD LOGIC
     const avatarUpload = document.getElementById('avatar-upload');
-    if (avatarUpload) {
+    if(avatarUpload) {
         avatarUpload.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -290,16 +284,16 @@ export const initOnboarding = () => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const dataUrl = e.target.result;
-
+                    
                     // Show preview
                     const imgPreview = document.getElementById('avatar-preview-img');
                     const iconPreview = document.getElementById('avatar-preview-icon');
-
-                    if (imgPreview) {
+                    
+                    if(imgPreview) {
                         imgPreview.src = dataUrl;
                         imgPreview.style.display = 'block';
                     }
-                    if (iconPreview) iconPreview.style.display = 'none';
+                    if(iconPreview) iconPreview.style.display = 'none';
 
                     // Save to temp storage
                     localStorage.setItem('hyeme_avatar_temp', dataUrl);
@@ -324,30 +318,30 @@ export const initOnboarding = () => {
         const savedAbout = localStorage.getItem('hyeme_about');
         const savedAvatar = localStorage.getItem('hyeme_avatar_temp');
 
-        if (nameEl && savedName) nameEl.textContent = savedName;
-        if (aboutEl && savedAbout) aboutEl.textContent = savedAbout;
-
+        if(nameEl && savedName) nameEl.textContent = savedName;
+        if(aboutEl && savedAbout) aboutEl.textContent = savedAbout;
+        
         // Load avatar
         if (savedAvatar && savedAvatar !== "null" && avatarImgEl) {
             avatarImgEl.src = savedAvatar;
             avatarImgEl.style.display = 'block';
-            if (avatarIconEl) avatarIconEl.style.display = 'none';
+            if(avatarIconEl) avatarIconEl.style.display = 'none';
         } else {
             const oldAvatar = localStorage.getItem('hyeme_avatar');
             if (oldAvatar && oldAvatar !== "null" && avatarImgEl) {
                 avatarImgEl.src = oldAvatar;
                 avatarImgEl.style.display = 'block';
-                if (avatarIconEl) avatarIconEl.style.display = 'none';
+                if(avatarIconEl) avatarIconEl.style.display = 'none';
             } else {
-                if (avatarIconEl) avatarIconEl.style.display = 'block';
-                if (avatarImgEl) avatarImgEl.style.display = 'none';
+                if(avatarIconEl) avatarIconEl.style.display = 'block';
+                if(avatarImgEl) avatarImgEl.style.display = 'none';
             }
         }
 
-        if (confirmEdit) confirmEdit.addEventListener('click', () => router.navigate('onboarding/profile'));
-        if (confirmBack) confirmBack.addEventListener('click', () => router.navigate('onboarding/profile'));
+        if(confirmEdit) confirmEdit.addEventListener('click', () => router.navigate('onboarding/profile'));
+        if(confirmBack) confirmBack.addEventListener('click', () => router.navigate('onboarding/profile'));
 
-        if (confirmSubmit) {
+        if(confirmSubmit) {
             confirmSubmit.addEventListener('click', () => {
                 router.navigate('onboarding/loading');
             });
@@ -357,19 +351,19 @@ export const initOnboarding = () => {
     // --- LOADING PAGE (UPLOAD & SAVE) ---
     // FIX: Check for loading spinner to know we are on this page
     if (document.querySelector('.fa-circle-notch') && !isUploading) {
-        isUploading = true;
-
+        isUploading = true; 
+        
         const finishOnboarding = async () => {
             const token = localStorage.getItem('hyeme_token');
             const name = localStorage.getItem('hyeme_name') || 'HyeMe User';
             const about = localStorage.getItem('hyeme_about') || 'Hey there! I am using HyeMe.';
             const tempAvatar = localStorage.getItem('hyeme_avatar_temp');
-
+            
             try {
                 const formData = new FormData();
                 formData.append('name', name);
                 formData.append('about', about);
-
+                
                 if (selectedAvatarFile) {
                     formData.append('avatar', selectedAvatarFile);
                 }
@@ -386,7 +380,7 @@ export const initOnboarding = () => {
 
                 if (res.ok) {
                     const data = await res.json();
-
+                    
                     // UPDATE LOCAL STORAGE IMMEDIATELY
                     if (data.user) {
                         localStorage.setItem('hyeme_user', JSON.stringify(data.user));
@@ -402,8 +396,8 @@ export const initOnboarding = () => {
 
                     // Clean up temp data
                     localStorage.removeItem('hyeme_avatar_temp');
-                    selectedAvatarFile = null;
-                    isUploading = false;
+                    selectedAvatarFile = null; 
+                    isUploading = false; 
 
                     // Navigate to Home
                     router.navigate('main/chats');
@@ -413,7 +407,7 @@ export const initOnboarding = () => {
                     isUploading = false;
                     router.navigate('onboarding/profile');
                 }
-
+                
             } catch (err) {
                 console.error("Onboarding save error", err);
                 alert("Network error. Please try again.");
@@ -421,15 +415,8 @@ export const initOnboarding = () => {
                 router.navigate('onboarding/profile');
             }
         };
-
+        
         // Add small delay so user sees the spinner
         setTimeout(finishOnboarding, 1500);
     }
-};
-const showToast = (message) => {
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:white;padding:12px 24px;border-radius:24px;font-size:14px;z-index:1000;`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
 };

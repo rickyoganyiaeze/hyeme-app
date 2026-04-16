@@ -9,6 +9,8 @@ const sendOTP = async (phone) => {
     console.log(`[DEV MODE] OTP for ${phone}: ${otp}`);
     
     // Return the OTP in the response so frontend can grab it
+    // mockOtp is for the server to verify later
+    // devOtp is for the frontend to show the user
     return { success: true, mockOtp: otp, devOtp: otp }; 
 };
 
