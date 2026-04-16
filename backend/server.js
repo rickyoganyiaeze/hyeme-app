@@ -41,19 +41,26 @@ try {
 // ============================================================
 console.log('⚙️  Setting up middleware...');
 
-// CORS - FIX: Added your hosted URL to the allowed list
+// CORS - FIXED: Explicitly allow Live Server, Localhost, and Render Hosting
 app.use(cors({
     origin: [
         'http://localhost:5000', 
         'http://127.0.0.1:5000', 
         'http://127.0.0.1:5500', 
         'http://localhost:5500',
-        'https://hyeme-app.onrender.com' // <--- ADDED THIS FOR HOSTING
+        'https://hyeme-app.onrender.com' 
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// FIX: ADD THESE HEADERS TO FIX BLANK SCREEN ON RENDER (ES Module CORS Fix)
+app.use((req, res, next) => {
+    res.header('Cross-Origin-Opener-Policy', 'same-origin');
+    res.header('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+});
 
 // Parse JSON bodies
 app.use(express.json({ limit: '10mb' }));
