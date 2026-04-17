@@ -56,8 +56,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 
 /* HEADERS & FOOTERS */
 .app-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); min-height: 60px; z-index: 20;}
-.app-footer { display: flex; align-items: center; padding: 10px; background: var(--bg-main); border-top: 1px solid var(--border-color); z-index: 20;}
-
+.app-footer { display: flex; align-items: center; padding: 10px; background: var(--bg-main); border-top: 1px solid var(--border-color); z-index: 20; position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; }
 /* AUTH SCREENS */
 .auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 32px; background: var(--bg-main); }
 .auth-container h1 { font-size: 24px; margin-bottom: 8px; }
@@ -135,3 +134,9 @@ button:focus, input:focus { outline: none !important; }
         padding: 48px;
     }
 }
+/* MOBILE KEYBOARD FIX */
+@supports (height: 100dvh) {
+    .app-container {
+        height: 100dvh; /* dvh = dynamic viewport height (ignores mobile keyboard) */
+    }
+   }
