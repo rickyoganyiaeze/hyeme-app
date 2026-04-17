@@ -1,5 +1,5 @@
 /* ============================================================
-   HYEME STYLES (Clean - No conflicting responsive rules)
+   HYEME STYLES
    ============================================================ */
 
 :root {
@@ -34,30 +34,33 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 /* APP CONTAINER */
 .app-container { 
     display: flex; 
-    flex-direction: column; /* Mobile default: vertical stack */
+    flex-direction: column; 
     height: 100vh; 
     width: 100%; 
-    max-width: 480px; /* Mobile width limit */
+    max-width: 480px; 
     margin: 0 auto; 
     background: var(--bg-main); 
     position: relative; 
     overflow: hidden; 
 }
 
+/* CRITICAL FIX: Strict vertical layout so footer cannot escape */
 .screen { 
     display: flex !important; 
-    flex-direction: column; 
-    height: 100%; 
-    width: 100%; 
+    flex-direction: column !important; 
+    flex-wrap: nowrap !important; 
+    height: 100% !important; 
+    width: 100% !important; 
     background: var(--bg-main); 
     position: absolute; 
     top: 0; left: 0; z-index: 50; 
+    overflow: hidden !important;
 }
 
 /* HEADERS & FOOTERS */
 .app-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); min-height: 60px; z-index: 20; flex-shrink: 0;}
 
-/* FIX: Solid visible footer that cannot be pushed off-screen on mobile */
+/* CRITICAL FIX: Input bar locked to bottom */
 .app-footer { 
     display: flex; 
     align-items: center; 
@@ -66,6 +69,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
     border-top: 1px solid var(--border-color); 
     z-index: 20;
     flex-shrink: 0; /* Prevents mobile keyboard from squishing it */
+    width: 100%;
 }
 
 [data-theme="dark"] .app-footer {
@@ -73,7 +77,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 }
 
 /* AUTH SCREENS */
-.auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 32px; background: var(--bg-main); }
+.auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 32px; background: var(--bg-main); overflow-y: auto; }
 .auth-container h1 { font-size: 24px; margin-bottom: 8px; }
 .auth-container p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; }
 .input-group { margin-bottom: 16px; position: relative; }
@@ -98,7 +102,18 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 .chat-time { font-size: 11px; color: var(--text-secondary); margin-left: 8px; }
 
 /* CHAT VIEW */
-.messages-container { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; background: var(--bg-secondary); }
+/* flex: 1 makes this fill the gap between header and footer */
+.messages-container { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 16px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    background: var(--bg-secondary); 
+    min-height: 0; /* Allows it to shrink when keyboard opens */
+}
+
 .msg-bubble { max-width: 80%; padding: 10px 14px; border-radius: 12px; position: relative; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
 .msg-them { background: var(--bubble-them); color: var(--text-bubble-them); align-self: flex-start; border-bottom-left-radius: 4px; }
 .msg-me { background: var(--bubble-me); color: var(--text-bubble-me); align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -110,7 +125,6 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 .msg-input-area input { flex: 1; border: none; background: var(--bg-secondary); padding: 12px 16px; border-radius: 24px; font-size: 15px; color: var(--text-main); }
 .msg-input-area button { background: none; border: none; color: var(--primary); font-size: 20px; padding: 8px; cursor: pointer; flex-shrink: 0; }
 
-/* FIX: Force send button to always be visible and solid */
 .send-btn { 
     color: var(--primary) !important; 
     font-size: 22px !important; 
@@ -148,7 +162,7 @@ button:focus, input:focus { outline: none !important; }
 }
 .page-transition-overlay.active { opacity: 1; }
 
-/* AUTH CENTERING ON DESKTOP (handled by JS but CSS backup) */
+/* AUTH CENTERING ON DESKTOP */
 @media (min-width: 768px) {
     .auth-container {
         max-width: 400px;
@@ -162,4 +176,4 @@ button:focus, input:focus { outline: none !important; }
     .app-container {
         height: 100dvh;
     }
-}
+   }
