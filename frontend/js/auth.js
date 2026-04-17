@@ -60,7 +60,7 @@ let selectedCountryCode = '1';
 let selectedAvatarFile = null; 
 let isUploading = false; 
 
-// NEW: Native SMS Notification Banner
+// Native SMS Notification Banner
 const showNativeSmsNotification = (code) => {
     const existing = document.getElementById('native-sms-banner');
     if (existing) existing.remove();
@@ -71,7 +71,6 @@ const showNativeSmsNotification = (code) => {
 
     banner.innerHTML = `
         <div style="max-width:480px;margin:10px auto;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.12);overflow:hidden;border:1px solid rgba(0,0,0,0.05);">
-            <!-- Header -->
             <div style="padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
                 <div style="width:36px;height:36px;border-radius:50%;background:#7C3AED;display:flex;align-items:center;justify-content:center;">
                     <i class="fas fa-comment-dots" style="color:white;font-size:16px;"></i>
@@ -82,7 +81,6 @@ const showNativeSmsNotification = (code) => {
                 </div>
                 <div style="font-size:11px;color:#9CA3AF;">Now</div>
             </div>
-            <!-- Body -->
             <div style="padding:14px 16px;background:#fff;">
                 <p style="font-size:13px;color:#374151;margin:0 0 8px 0;line-height:1.4;">
                     <span style="font-weight:600;color:#111827;">HyeMe Code:</span> Your verification code is <strong style="color:#7C3AED;letter-spacing:1px;">${code}</strong>. Do not share this code.
@@ -96,18 +94,15 @@ const showNativeSmsNotification = (code) => {
 
     document.body.appendChild(banner);
 
-    // Slide down animation
     setTimeout(() => {
         banner.style.transform = 'translateY(0)';
     }, 50);
 
-    // Auto-dismiss after 15 seconds
     setTimeout(() => {
         banner.style.transform = 'translateY(-100%)';
         setTimeout(() => banner.remove(), 400);
     }, 15000);
 
-    // Copy Logic
     banner.querySelector('#copy-native-code-btn').onclick = () => {
         navigator.clipboard.writeText(code).then(() => {
             const btn = banner.querySelector('#copy-native-code-btn');
@@ -202,11 +197,9 @@ export const initAuth = () => {
 
                 if (res.ok) {
                     localStorage.setItem('hyeme_phone', fullPhone);
-                    
-                    // 1. Navigate to OTP screen immediately
                     router.navigate('auth/otp');
                     
-                    // 2. Show native notification banner with the EXACT code the backend generated
+                    // This grabs the exact code from the backend and shows it in the banner
                     if (data.devOtp) {
                         setTimeout(() => showNativeSmsNotification(data.devOtp), 800);
                     }
@@ -255,7 +248,6 @@ export const initAuth = () => {
                         localStorage.setItem('hyeme_user', JSON.stringify(data.user));
                     }
 
-                    // Dismiss SMS banner if still open
                     const banner = document.getElementById('native-sms-banner');
                     if(banner) banner.remove();
 
@@ -425,3 +417,49 @@ export const initOnboarding = () => {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    
+                    // UPDATE LOCAL STORAGE IMMEDIATELY
+                    if (data.user) {
+                        localStorage.setItem('hyeme_user', JSON.stringify(data.user));
+                        localStorage.setItem('hyeme_name', data.user.name);
+                        localStorage.setItem('hyeme_about', data.user.about);
+
+                        if (data.user.avatar) {
+                            localStorage.setItem('hyeme_avatar', data.user.avatar);
+                        } else if (tempAvatar) {
+                            localStorage.setItem('hyeme_avatar', tempAvatar);
+                        }
+                    }
+
+                    // Clean up temp data
+                    localStorage.removeItem('hyeme_avatar_temp');
+                    selectedAvatarFile = null; 
+                    isUploading = false; 
+
+                    // Navigate to Home
+                    router.navigate('main/chats');
+                } else {
+                    console.error("Upload failed", res.status);
+                    alert(`Error: Profile save failed (Status ${res.status}). Please try again.`);
+                    isUploading = false;
+                    router.navigate('onboarding/profile');
+                }
+                
+            } catch (err) {
+                console.error("Onboarding save error", err);
+                alert("Network error. Please try again.");
+                isUploading = false;
+                router.navigate('onboarding/profile');
+            }
+        };
+        
+        // Add small delay so user sees the spinner
+        setTimeout(finishOnboarding, 1500);
+    }
+};
