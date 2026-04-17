@@ -59,11 +59,16 @@
     <script type="module">
         import { initApp } from './js/app.js';
 
-        setTimeout(() => {
-            document.getElementById('splash').style.display = 'none';
-            document.getElementById('app').classList.remove('hidden');
-            initApp();
-        }, 2000);
+        // FIX: We wait for the 'load' event. 
+        // This guarantees ALL javascript files are fully downloaded from Render 
+        // before we try to open the app.
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('app').classList.remove('hidden');
+                initApp();
+            }, 1500); // 1.5 second splash screen for smooth feel
+        });
     </script>
 </body>
 
