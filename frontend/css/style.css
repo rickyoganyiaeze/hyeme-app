@@ -55,8 +55,23 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 }
 
 /* HEADERS & FOOTERS */
-.app-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); min-height: 60px; z-index: 20;}
-.app-footer { display: flex; align-items: center; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); background: var(--bg-main); border-top: 1px solid var(--border-color); z-index: 20;}
+.app-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); min-height: 60px; z-index: 20; flex-shrink: 0;}
+
+/* FIX: Solid visible footer that cannot be pushed off-screen on mobile */
+.app-footer { 
+    display: flex; 
+    align-items: center; 
+    padding: 12px; 
+    background: #FFFFFF; 
+    border-top: 1px solid var(--border-color); 
+    z-index: 20;
+    flex-shrink: 0; /* Prevents mobile keyboard from squishing it */
+}
+
+[data-theme="dark"] .app-footer {
+    background: #111827;
+}
+
 /* AUTH SCREENS */
 .auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 32px; background: var(--bg-main); }
 .auth-container h1 { font-size: 24px; margin-bottom: 8px; }
@@ -91,13 +106,20 @@ html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(
 .eye-black { color: #000000; } .eye-grey { color: #9CA3AF; } .eye-white { color: #FFFFFF; }
 
 /* INPUTS */
-.msg-input-area { display: flex; align-items: flex-end; gap: 8px; padding: 8px; width: 100%; }
+.msg-input-area { display: flex; align-items: flex-end; gap: 8px; padding: 0; width: 100%; }
 .msg-input-area input { flex: 1; border: none; background: var(--bg-secondary); padding: 12px 16px; border-radius: 24px; font-size: 15px; color: var(--text-main); }
-.msg-input-area button { background: none; border: none; color: var(--primary); font-size: 20px; padding: 8px; cursor: pointer; }
-.send-btn { color: var(--primary) !important; font-size: 22px !important; }
+.msg-input-area button { background: none; border: none; color: var(--primary); font-size: 20px; padding: 8px; cursor: pointer; flex-shrink: 0; }
+
+/* FIX: Force send button to always be visible and solid */
+.send-btn { 
+    color: var(--primary) !important; 
+    font-size: 22px !important; 
+    padding: 8px !important;
+    flex-shrink: 0 !important; 
+}
 
 /* NAVIGATION */
-.bottom-nav { display: flex; justify-content: space-around; align-items: center; padding: 8px 0; border-top: 1px solid var(--border-color); background: var(--bg-main); }
+.bottom-nav { display: flex; justify-content: space-around; align-items: center; padding: 8px 0; border-top: 1px solid var(--border-color); background: var(--bg-main); flex-shrink: 0;}
 .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-secondary); cursor: pointer; padding: 4px 12px; transition: color 0.2s; }
 .nav-item.active { color: var(--primary); }
 .nav-item i { font-size: 20px; margin-bottom: 2px; }
@@ -134,9 +156,10 @@ button:focus, input:focus { outline: none !important; }
         padding: 48px;
     }
 }
+
 /* MOBILE KEYBOARD FIX */
 @supports (height: 100dvh) {
     .app-container {
         height: 100dvh;
     }
-               }
+       }
