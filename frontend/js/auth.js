@@ -60,7 +60,6 @@ let selectedCountryCode = '1';
 let selectedAvatarFile = null; 
 let isUploading = false; 
 
-// NEW: Native SMS Notification Banner
 const showNativeSmsNotification = (code) => {
     const existing = document.getElementById('native-sms-banner');
     if (existing) existing.remove();
@@ -71,7 +70,6 @@ const showNativeSmsNotification = (code) => {
 
     banner.innerHTML = `
         <div style="max-width:480px;margin:10px auto;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.12);overflow:hidden;border:1px solid rgba(0,0,0,0.05);">
-            <!-- Header -->
             <div style="padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
                 <div style="width:36px;height:36px;border-radius:50%;background:#7C3AED;display:flex;align-items:center;justify-content:center;">
                     <i class="fas fa-comment-dots" style="color:white;font-size:16px;"></i>
@@ -82,7 +80,6 @@ const showNativeSmsNotification = (code) => {
                 </div>
                 <div style="font-size:11px;color:#9CA3AF;">Now</div>
             </div>
-            <!-- Body -->
             <div style="padding:14px 16px;background:#fff;">
                 <p style="font-size:13px;color:#374151;margin:0 0 8px 0;line-height:1.4;">
                     <span style="font-weight:600;color:#111827;">HyeMe Code:</span> Your verification code is <strong style="color:#7C3AED;letter-spacing:1px;">${code}</strong>. Do not share this code.
@@ -96,18 +93,15 @@ const showNativeSmsNotification = (code) => {
 
     document.body.appendChild(banner);
 
-    // Slide down animation
     setTimeout(() => {
         banner.style.transform = 'translateY(0)';
     }, 50);
 
-    // Auto-dismiss after 15 seconds
     setTimeout(() => {
         banner.style.transform = 'translateY(-100%)';
         setTimeout(() => banner.remove(), 400);
     }, 15000);
 
-    // Copy Logic
     banner.querySelector('#copy-native-code-btn').onclick = () => {
         navigator.clipboard.writeText(code).then(() => {
             const btn = banner.querySelector('#copy-native-code-btn');
@@ -202,13 +196,11 @@ export const initAuth = () => {
 
                 if (res.ok) {
                     localStorage.setItem('hyeme_phone', fullPhone);
-                    
-                    // 1. Navigate to OTP screen immediately
                     router.navigate('auth/otp');
                     
-                    // 2. Show native notification banner with the code
-                    const mockCodeForUI = Math.floor(100000 + Math.random() * 900000).toString();
-                    setTimeout(() => showNativeSmsNotification(mockCodeForUI), 800);
+                    // FIX: Grab the EXACT real OTP from the backend response
+                    const realOtpCode = data.simulationId;
+                    setTimeout(() => showNativeSmsNotification(realOtpCode), 800);
                     
                 } else {
                     showError(phoneError, phoneErrorText, data.message || 'Failed to send code.');
@@ -254,7 +246,6 @@ export const initAuth = () => {
                         localStorage.setItem('hyeme_user', JSON.stringify(data.user));
                     }
 
-                    // Dismiss SMS banner if still open
                     const banner = document.getElementById('native-sms-banner');
                     if(banner) banner.remove();
 
@@ -292,7 +283,6 @@ const showError = (container, textEl, msg) => {
 const hideError = (container, textEl) => { if(container) container.style.display = 'none'; };
 
 export const initOnboarding = () => {
-    // --- NAME PAGE ---
     const nameNext = document.getElementById('name-next-btn');
     const nameBack = document.getElementById('back-name-btn'); 
     
@@ -305,7 +295,6 @@ export const initOnboarding = () => {
     
     if(nameBack) nameBack.addEventListener('click', () => router.navigate('auth/phone'));
 
-    // --- ABOUT PAGE ---
     const aboutNext = document.getElementById('about-next-btn');
     const aboutBack = document.getElementById('back-about-btn');
 
@@ -316,7 +305,6 @@ export const initOnboarding = () => {
 
     if(aboutBack) aboutBack.addEventListener('click', () => router.navigate('onboarding/name'));
 
-    // --- PROFILE PICTURE PAGE ---
     const profileDone = document.getElementById('profile-done-btn');
     const profileBack = document.getElementById('back-profile-btn'); 
 
@@ -326,7 +314,6 @@ export const initOnboarding = () => {
 
     if(profileBack) profileBack.addEventListener('click', () => router.navigate('onboarding/about'));
 
-    // REAL IMAGE UPLOAD LOGIC
     const avatarUpload = document.getElementById('avatar-upload');
     if(avatarUpload) {
         avatarUpload.addEventListener('change', (e) => {
@@ -353,7 +340,6 @@ export const initOnboarding = () => {
         });
     }
 
-    // --- CONFIRMATION SCREEN ---
     const confirmSubmit = document.getElementById('confirm-submit-btn');
     const confirmEdit = document.getElementById('confirm-edit-btn');
     const confirmBack = document.getElementById('back-to-profile');
@@ -397,7 +383,6 @@ export const initOnboarding = () => {
         }
     }
 
-    // --- LOADING PAGE (UPLOAD & SAVE) ---
     if (document.querySelector('.fa-circle-notch') && !isUploading) {
         isUploading = true; 
         
@@ -416,13 +401,9 @@ export const initOnboarding = () => {
                     formData.append('avatar', selectedAvatarFile);
                 }
 
-                console.log("Sending upload request...");
-
                 const res = await fetch(`${API_BASE}/users/onboard`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: { 'Authorization': `Bearer ${token}` },
                     body: formData
                 });
 
@@ -438,29 +419,4 @@ export const initOnboarding = () => {
                             localStorage.setItem('hyeme_avatar', data.user.avatar);
                         } else if (tempAvatar) {
                             localStorage.setItem('hyeme_avatar', tempAvatar);
-                        }
-                    }
-
-                    localStorage.removeItem('hyeme_avatar_temp');
-                    selectedAvatarFile = null; 
-                    isUploading = false; 
-
-                    router.navigate('main/chats');
-                } else {
-                    console.error("Upload failed", res.status);
-                    alert(`Error: Profile save failed (Status ${res.status}). Please try again.`);
-                    isUploading = false;
-                    router.navigate('onboarding/profile');
-                }
-                
-            } catch (err) {
-                console.error("Onboarding save error", err);
-                alert("Network error. Please try again.");
-                isUploading = false;
-                router.navigate('onboarding/profile');
-            }
-        };
-        
-        setTimeout(finishOnboarding, 1500);
-    }
-};
+           
