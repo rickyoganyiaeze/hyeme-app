@@ -15,17 +15,19 @@ exports.sendOTP = async (req, res, next) => {
         otpStore[phone] = result.mockOtp; 
 
         console.log(`\n=========================================`);
-        console.log(`[SMS SIMULATION] Phone: ${phone}`);
-        console.log(`[REAL OTP: ${result.mockOtp}]`);
+        console.log(`[NEW OTP REQUEST] Phone: ${phone}`);
+        console.log(`[YOUR MOCK OTP CODE IS: ${result.mockOtp}]`);
         console.log(`=========================================\n`);
 
-        // FIX: Send the real OTP securely disguised as a 'simulationId'
-        // This prevents the "Invalid Code" error while looking professional in the network tab
-        res.status(200).json({ 
-            message: 'Code sent successfully',
-            simulationId: result.mockOtp 
-        });
-        
+        // This sends the exact correct code to the frontend SMS banner
+        if (result.mockOtp) {
+            return res.status(200).json({ 
+                message: 'OTP generated (Dev Mode)', 
+                devOtp: result.mockOtp 
+            });
+        }
+
+        res.status(200).json({ message: 'OTP sent successfully' });
     } catch (error) { next(error); }
 };
 
@@ -39,7 +41,7 @@ exports.verifyOTP = async (req, res, next) => {
         if (!storedOtp) {
              const existingUser = await User.findOne({ phone });
              if (!existingUser) {
-                 return res.status(400).json({ message: 'Please request a code first' });
+                 return res.status(400).json({ message: 'Please request an OTP first' });
              }
              console.log(`[Recovery Mode] User ${phone} found, allowing login.`);
         } else {
